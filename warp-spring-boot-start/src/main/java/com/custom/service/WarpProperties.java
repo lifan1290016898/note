@@ -1,7 +1,9 @@
 package com.custom.service;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Data
 @ConfigurationProperties("custom.warp")
 public class WarpProperties {
 
@@ -9,19 +11,4 @@ public class WarpProperties {
 
     private String after;
 
-    public String getBefor() {
-        return befor;
-    }
-
-    public void setBefor(String befor) {
-        this.befor = befor;
-    }
-
-    public String getAfter() {
-        return after;
-    }
-
-    public void setAfter(String after) {
-        this.after = after;
-    }
 }
