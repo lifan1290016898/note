@@ -10,5 +10,4 @@ public class WarpProperties {
     private String befor;
 
     private String after;
-
 }
