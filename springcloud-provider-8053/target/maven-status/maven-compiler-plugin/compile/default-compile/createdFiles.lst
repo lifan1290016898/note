@@ -1,0 +1,6 @@
+com\demo\model\Users.class
+com\demo\service\ProviderService.class
+com\demo\SpringcloudProviderApplication.class
+com\demo\web\ProviderController.class
+com\demo\mapper\ProviderMapper.class
+com\demo\service\impl\ProviderServiceImpl.class

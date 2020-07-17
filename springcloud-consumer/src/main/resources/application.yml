@@ -8,3 +8,11 @@ eureka:
 spring:
   application:
     name: consumer
+
+# 设置feign的连接和接受响应的超时时间
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
