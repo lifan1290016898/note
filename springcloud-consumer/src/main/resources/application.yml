@@ -16,3 +16,19 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 5000
+  hystrix:
+    enabled: true
+
+# 更改ribbon负载均衡策略
+#PROVIDER:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.demo.configuration.rule.CustomIRule
+
+# 设置hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000

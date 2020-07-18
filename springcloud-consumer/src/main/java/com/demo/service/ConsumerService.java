@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@FeignClient("PROVIDER")
+//@FeignClient(value = "PROVIDER", fallbackFactory = MyClassFallbackFactory.class)
+@FeignClient(value = "PROVIDER", fallback = ConsumerServiceImpl.class)
 public interface ConsumerService {
 
     @RequestMapping("/find/{name}")

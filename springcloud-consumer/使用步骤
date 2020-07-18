@@ -1,0 +1,52 @@
+feign
+    1、添加feign依赖
+    2、定义一个feign接口，在接口中使用@FeignClient("调用的微服务名称"), 在方法中定义和目标微服务的controller
+    中一样的抽象方法包括@RequestMapping、@PathVariable等等
+    3、在使用的地方注入一个feign接口
+    4、在主类中使用@EnableFeignClients注解启用feign
+
+负载均衡
+    1、修改负载均衡策略
+        可以使用两种方式配置负载均衡策略，默认是轮询的方式
+        1、配置文件修改
+            微服务名称:
+              ribbon:
+                NFLoadBalancerRuleClassName: 策略的类
+        2、配置类的方式
+            @Bean
+            public IRule loadBalanceRule(){
+                return new一个负载策略类;
+            }
+    2、自定义负载均衡策略
+        实现IRule接口，实现它的三个方法，在 public void setLoadBalancer(ILoadBalancer lb)方法中，
+        为类中的ILoadBalancer赋值，ILoadBalancer可以获取所有服务和up状态的服务，这个类的无参构造必须要有
+
+hystrix
+    1、方法级别的降级
+        步骤
+            1、在主配置类中加@EnableCircuitBreaker注解或者@SpringCloudApplication注解，
+            @SpringCloudApplication注解包括@SpringBootApplication和@EnableCircuitBreaker注解
+            所以加了@SpringCloudApplication就不用加@SpringBootApplication和@EnableCircuitBreaker
+            2、在方法上加@HystrixCommand(fallbackMethod = "fallbackMethod")注解
+            3、定义一个方法名称为fallbackMethod指定的方法，返回值和参数一致
+    2、类级别的降级
+        方式一
+            步骤
+                1、需要在配置文件中启用hystrix对feign的支持
+                feign:
+                   hystrix:
+                      enabled: true
+                2、定义一个类实现FallbackFactory接口，指定feign接口为这个泛型，实现create方法创建feign接口的所有所有方法
+                该类需要被spring容器管理所以需要加入@Component注解
+                3、在feign接口中指定fallbackFactory，指定降级类
+        方式二
+            步骤
+                1、定义一个降级类，实现feign接口
+                2、增加@Component注解
+                3、增加@RequestMapping("/fallback/xxx")
+                   xxx是对应目标微服务的requestMapping注解，意思是这里就需要以/fallback开头
+                4、在feign中的@FeignClient注解中指定fallback
+
+
+
+
