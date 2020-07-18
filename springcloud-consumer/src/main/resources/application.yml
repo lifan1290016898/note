@@ -9,7 +9,7 @@ spring:
   application:
     name: consumer
 
-# 设置feign的连接和接受响应的超时时间
+# 鎸囧畾feign鐨勮繛鎺ュ拰璇诲彇瓒呮椂鏃堕棿
 feign:
   client:
     config:
