@@ -23,3 +23,13 @@ zuul:
 #  ignored-patterns:
 #  屏蔽掉指定的敏感头信息，其会将原来默认的Cookie、SetCookie、Authorization敏感头信息放开
   sensitive-headers: token
+  # 使用ratelimit方式限流
+  ratelimit:
+    enabled: true
+    # 在1个(quota)单位(refresh-interval)的时间窗内通过zuul的用户数量(user)、ip数量(origin)和url数量(url)，
+    # 都不能超过3个(limit)，这里可以用作防止表单重复提交，导入ratelimit依赖后进行这里的配置就可以了
+    default-policy:
+      quota: 1
+      refresh-interval: 3
+      limit:  3
+      type: user,origin,url

@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 /**
- * 令牌桶
+ * 令牌桶限流
  */
-@Component
+//@Component
 public class MyZuulFilter extends ZuulFilter {
 
     // 每秒生成2个令牌
