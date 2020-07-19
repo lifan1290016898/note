@@ -1,17 +1,21 @@
 package com.demo.filter;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-
+/**
+ * 令牌桶
+ */
 @Component
 public class MyZuulFilter extends ZuulFilter {
+
+    // 每秒生成2个令牌
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
 
     // 过滤的时机
     @Override
@@ -33,12 +37,9 @@ public class MyZuulFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         RequestContext currentContext = RequestContext.getCurrentContext();
-        HttpServletRequest request = currentContext.getRequest();
-        String user = request.getParameter("user");
-        String uri = request.getRequestURI();
-        if (StringUtils.isBlank(user) && uri.contains("note-consumer")) {
+        if (!RATE_LIMITER.tryAcquire()) {
             currentContext.setSendZuulResponse(Boolean.FALSE);
-            currentContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+            currentContext.setResponseStatusCode(HttpStatus.TOO_MANY_REQUESTS.value());
             return false;
         }
         return true;
