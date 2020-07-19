@@ -1,10 +1,12 @@
 package com.demo.web;
 
+import ch.qos.logback.core.util.TimeUtil;
 import com.demo.model.Users;
 import com.demo.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ProviderController {
@@ -25,6 +28,11 @@ public class ProviderController {
 
     @RequestMapping(value = "/find/{name}", method = RequestMethod.GET)
     public List<Users> findUserByLikeName(@PathVariable(value = "name", required = false) String name){
+//        try {
+//            TimeUnit.SECONDS.sleep(5);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return service.findUserByLikeName(name);
     }
 

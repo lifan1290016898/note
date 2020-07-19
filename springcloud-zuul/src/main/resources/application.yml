@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka
+
+
+spring:
+  application:
+    name: springcloud-zuul
+
+
+zuul:
+  routes:
+#   修改微服务路由访问规则
+    PROVIDER: /note-provider/**
+    CONSUMER: /note-consumer/**
+#   屏蔽直接使用微服务名称的方式访问
+  ignored-services: "*"
+#  屏蔽指定的URI
+#  ignored-patterns:
+#  屏蔽掉指定的敏感头信息，其会将原来默认的Cookie、SetCookie、Authorization敏感头信息放开
+  sensitive-headers: token
