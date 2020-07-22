@@ -1,13 +1,14 @@
-package com.demo;
+package org.example;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OOMTest {
 
-    public static byte[] bytes = new byte[1024 * 1024 * 2];
+    private static byte[] bytes = new byte[1024 * 1024 * 200];
 
-    public static void main(String[] args) {
+    public static void main( String[] args ){
         List<Object> list = new ArrayList<>();
         while (true){
             list.add(bytes);
