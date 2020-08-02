@@ -1,6 +1,7 @@
 package com.demo.web;
 
 import com.alibaba.fastjson.JSONObject;
+import com.demo.model.po.LoginUserPo;
 import com.demo.model.po.RegisterUserPo;
 import com.demo.result.Result;
 import com.demo.service.UserService;
@@ -22,9 +23,9 @@ public class LoginController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(@RequestBody Map<String, String> map) {
-        String loginName = map.get("loginName");
-        String passWord = map.get("passWord");
+    public Result login(LoginUserPo po) {
+        String loginName = po.getName();
+        String passWord = po.getPassword();
         //身份验证
         boolean isSuccess = userService.checkUser(loginName, passWord);
         if (isSuccess) {

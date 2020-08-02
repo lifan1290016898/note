@@ -11,6 +11,13 @@ import java.util.HashMap;
 
 public class JwtUtil {
 
+    private static String token;
+
+    public static String getToken() {
+        return token;
+    }
+
+
     /**
      * 过期时间为一天
      * TODO 正式上线更换为15分钟
@@ -39,8 +46,9 @@ public class JwtUtil {
         header.put("typ", "JWT");
         header.put("alg", "HS256");
         //附带username和userID生成签名
-        return JWT.create().withHeader(header).withClaim("loginName", username)
+        token = JWT.create().withHeader(header).withClaim("loginName", username)
                 .withClaim("userId", userId).withExpiresAt(date).sign(algorithm);
+        return token;
     }
 
 
@@ -55,7 +63,6 @@ public class JwtUtil {
         } catch (JWTVerificationException e) {
             return false;
         }
-
     }
 }
 
