@@ -1,12 +1,18 @@
 package com.demo.service.impl;
 
 import com.demo.mapper.UserMapper;
+import com.demo.model.bo.BaseUserBo;
+import com.demo.model.bo.LoginUserBo;
 import com.demo.model.bo.RegisterUserBo;
+import com.demo.model.po.LoginUserPo;
 import com.demo.model.po.RegisterUserPo;
 import com.demo.result.Result;
 import com.demo.service.UserService;
 import com.demo.util.CodeMd5;
+import com.demo.util.JwtUtil;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,17 +24,28 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper mapper;
 
-    @Override
-    public boolean checkUser(String loginName, String passWord) {
-        return true;
-    }
+    private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public RegisterUserPo getUser(String loginName) {
-        RegisterUserPo registerUserPo = new RegisterUserPo();
-        registerUserPo.setName("李四");
-        registerUserPo.setPassword("123");
-        return registerUserPo;
+    public Result login(LoginUserPo po) {
+        if(po == null){
+            return Result.fail("参数不能为空");
+        }
+        String role = po.getRole();
+        LoginUserBo bo = new LoginUserBo();
+        BeanUtils.copyProperties(po, bo);
+        bo.setPassword(CodeMd5.codeMd5(bo.getPassword()));
+        BaseUserBo baseUserBo = null;
+        // 普通用户登录
+        if(StringUtils.equals(role, "isBuyers")){
+            baseUserBo = mapper.customerLogin(bo);
+        } else if(StringUtils.equals(role, "isSellers")){
+            // 商家登录
+            baseUserBo = mapper.businessLogin(bo);
+        }
+        String token = this.generateUserToken(baseUserBo);
+        Result result = StringUtils.isNotBlank(token) && baseUserBo != null ?  Result.success("登录成功", token) : Result.fail();
+        return result;
     }
 
     @Override
@@ -53,4 +70,15 @@ public class UserServiceImpl implements UserService {
         }
         return Result.fail();
     }
+
+    private String generateUserToken(BaseUserBo bo){
+        try {
+            return JwtUtil.createToken(bo.getId(), bo.getName(), bo.getPassword());
+        } catch (Exception e) {
+            log.debug(e.getMessage(), e);
+        }
+        return null;
+    }
+
+
 }

@@ -10,4 +10,12 @@
         insert into business values (default,#{name},#{password},#{phone},#{address}, null, null)
     </insert>
 
+    <select id="customerLogin" resultType="com.demo.model.bo.CustomerBo" parameterType="com.demo.model.bo.LoginUserBo">
+
+    </select>
+
+    <select id="businessLogin" resultType="com.demo.model.bo.BusinessBo" parameterType="com.demo.model.bo.LoginUserBo">
+
+    </select>
+
 </mapper>

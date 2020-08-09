@@ -1,26 +1,17 @@
 package com.demo.service;
 
+import com.demo.model.po.LoginUserPo;
 import com.demo.model.po.RegisterUserPo;
 import com.demo.result.Result;
 
 public interface UserService {
 
     /**
-     * 校验用户信息
-     *
-     * @param loginName
-     * @param passWord
+     * 用户登录
+     * @param po
      * @return
      */
-    boolean checkUser(String loginName, String passWord);
-
-    /**
-     * 查询用户信息
-     *
-     * @param loginName
-     * @return
-     */
-    RegisterUserPo getUser(String loginName);
+    Result login(LoginUserPo po);
 
     /**
      * 用户注册
