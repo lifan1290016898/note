@@ -17,6 +17,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public Result login(LoginUserPo po) {
+    public Result login(LoginUserPo po, HttpServletRequest request) {
         if(po == null){
             return Result.fail("参数不能为空");
         }
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
             baseUserBo = mapper.businessLogin(bo);
         }
         String token = this.generateUserToken(baseUserBo);
+        // TODO 此处当做前端的处理(全局header)
+        ServletContext servletContext = request.getServletContext();
+        servletContext.setAttribute("token", token);
         Result result = StringUtils.isNotBlank(token) && baseUserBo != null ?  Result.success("登录成功", token) : Result.fail();
         return result;
     }

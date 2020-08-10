@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/user")
@@ -20,8 +22,8 @@ public class LoginController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(@Validated LoginUserPo po) {
-        return userService.login(po);
+    public Result login(@Validated LoginUserPo po, HttpServletRequest request) {
+        return userService.login(po, request);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
