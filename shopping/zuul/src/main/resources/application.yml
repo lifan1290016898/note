@@ -1,0 +1,21 @@
+server:
+  port: 8021
+spring:
+  application:
+    name: shopping-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-8002:8002/eureka/,http://eureka-8003:8003/eureka/,http://eureka-8001:8001/eureka/
+zuul:
+  ignored-services: "*"
+  sensitive-headers: token
+  ratelimit:
+    enabled: true
+    default-policy:
+      quota: 1
+      refresh-interval: 3
+      limit: 2
+      type: user,url,origin
+
