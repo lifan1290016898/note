@@ -1,10 +1,10 @@
-package com.li.zuul;
+package com.li.main;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ZuulApplicationTests {
+class EurekaApplicationTests {
 
     @Test
     void contextLoads() {

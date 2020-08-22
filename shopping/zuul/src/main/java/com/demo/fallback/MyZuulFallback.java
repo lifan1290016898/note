@@ -1,4 +1,4 @@
-package fallback;
+package com.demo.fallback;
 
 import org.springframework.cloud.netflix.zuul.filters.route.FallbackProvider;
 import org.springframework.http.HttpHeaders;
@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * zuul降级
+ * 网关服务降级
  */
 @Component
-public class ZuulFallback implements FallbackProvider {
+public class MyZuulFallback implements FallbackProvider {
+
     @Override
     public String getRoute() {
+        // 降级的微服务名称，如果是*表示所有微服务
         return "*";
     }
 
@@ -26,11 +28,13 @@ public class ZuulFallback implements FallbackProvider {
         return new ClientHttpResponse() {
             @Override
             public HttpStatus getStatusCode() throws IOException {
+                // 返回的Http状态是什么
                 return HttpStatus.SERVICE_UNAVAILABLE;
             }
 
             @Override
             public int getRawStatusCode() throws IOException {
+                // 返回的状态码
                 return HttpStatus.SERVICE_UNAVAILABLE.value();
             }
 
@@ -41,14 +45,16 @@ public class ZuulFallback implements FallbackProvider {
 
             @Override
             public void close() {
-
+                // 用于释放资源
             }
 
             @Override
             public InputStream getBody() throws IOException {
+                // 显示的内容
                 return new ByteArrayInputStream(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase().getBytes());
             }
 
+            // 头内容
             @Override
             public HttpHeaders getHeaders() {
                 HttpHeaders httpHeaders = new HttpHeaders();

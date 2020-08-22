@@ -1,13 +1,13 @@
-package com.li.zuul;
+package com.li.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ZuulApplication {
+public class FrontEndApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZuulApplication.class, args);
+        SpringApplication.run(FrontEndApplication.class, args);
     }
 
 }
