@@ -5,15 +5,25 @@ import com.demo.filter.VerificationCodeFilter;
 import com.demo.exception.handler.MyAuthenticationFailureHandler;
 import com.demo.result.Result;
 import com.demo.service.impl.MySecurityService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +35,20 @@ import java.io.PrintWriter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MySecurityService service;
+
+    @Autowired
+    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
+
+    @Autowired
+    @Qualifier("captchaDaoAuthenticationProvider")
+    private AuthenticationProvider captchaDaoAuthenticationProvider;
+
+    @Autowired
+    @Qualifier("passwordValidProvider")
+    private AuthenticationProvider passwordValidProvider;
+
+    @Autowired
+    private AuthenticationFailureHandler failureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .csrf().disable()
         // 表单登录配置
         .formLogin()
+            .authenticationDetailsSource(authenticationDetailsSource)
             .loginPage("/myLogin")
             .loginProcessingUrl("/auth/form").permitAll()
             .successHandler(new AuthenticationSuccessHandler() {
@@ -52,12 +77,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     writer.write(JSONObject.toJSONString(Result.success("登录成功!")));
                 }
             })
-            .failureHandler(new MyAuthenticationFailureHandler());
-        http.addFilterAfter(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class);
+            .failureHandler(failureHandler);
+        // 如果不使用这种方式验证请求中的验证码,那么,可以使用更加优雅的AuthenticationProvider方式
+//        http.addFilterAfter(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(service).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(service).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(captchaDaoAuthenticationProvider);
+        auth.authenticationProvider(passwordValidProvider);
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+
+
 }

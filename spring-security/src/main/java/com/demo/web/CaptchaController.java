@@ -29,9 +29,9 @@ public class CaptchaController {
         BufferedImage image = producer.createImage(capText);
         // 获取输出流
         ServletOutputStream outputStream = response.getOutputStream();
-        ImageIO.write(image,"jpg", outputStream);
+        ImageIO.write(image, "jpg", outputStream);
         try {
-          outputStream.flush();
+            outputStream.flush();
         } finally {
             outputStream.close();
         }
