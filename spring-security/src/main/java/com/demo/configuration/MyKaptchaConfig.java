@@ -20,7 +20,7 @@ public class MyKaptchaConfig {
         // 图片宽度
         properties.setProperty("kaptcha.img.width","150");
         // 图片长度
-        properties.setProperty("kaptcha.img.","50");
+        properties.setProperty("kaptcha.img.height","50");
         // 字符集
         properties.setProperty("kaptcha.textproducer.char","qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890");
         // 字符长度

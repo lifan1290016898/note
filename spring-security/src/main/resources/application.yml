@@ -1,6 +1,5 @@
 spring:
   datasource:
-    # securiry\u5355\u8BCD\u6709\u8BEF
     url: jdbc:mysql://localhost:3306/securiry?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -16,6 +15,21 @@ spring:
     cache: false
     mode: LEGACYHTML5
     suffix: .html
-
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+#    lettuce:
+#      shutdown-timeout: 0
 mybatis:
   mapper-locations: mapper/*Mapper.xml
+##会话过期时间(单位:秒)
+server:
+  servlet:
+    session:
+      timeout: 60

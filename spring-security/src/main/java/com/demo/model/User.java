@@ -1,9 +1,11 @@
 package com.demo.model;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Objects;
 
 public class User implements UserDetails {
 
@@ -89,5 +91,18 @@ public class User implements UserDetails {
 
     public void setAuthorities(List<GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    /**
+     * 会话管理使用的是map注册  以key为用户信息对象所以需要重写HashCode和Equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof User ? StringUtils.equals(this.username, ((User) o).getUsername()) : false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(username);
     }
 }
