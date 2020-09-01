@@ -75,7 +75,7 @@ public class UseManyCondition {
 	public static void main(String[] args) {
 		
 		
-		final com.bjsxt.height.lock020.UseManyCondition umc = new com.bjsxt.height.lock020.UseManyCondition();
+		final UseManyCondition umc = new UseManyCondition();
 		Thread t1 = new Thread(new Runnable() {
 			@Override
 			public void run() {
