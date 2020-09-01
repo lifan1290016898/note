@@ -40,7 +40,7 @@ public class TestHoldCount {
 	
 	
 	public static void main(String[] args) {
-		com.bjsxt.height.lock020.TestHoldCount thc = new com.bjsxt.height.lock020.TestHoldCount();
+		TestHoldCount thc = new TestHoldCount();
 		thc.m1();
 	}
 }
