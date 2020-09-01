@@ -39,7 +39,7 @@ public class UseReentrantLock {
 	
 	public static void main(String[] args) {
 
-		final com.bjsxt.height.lock020.UseReentrantLock ur = new com.bjsxt.height.lock020.UseReentrantLock();
+		final UseReentrantLock ur = new UseReentrantLock();
 		Thread t1 = new Thread(new Runnable() {
 			@Override
 			public void run() {
